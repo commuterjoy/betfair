@@ -5,6 +5,6 @@ bf = Betfair::General.new()
 
 session_token = bf.login('username', 'password', 82, 0, 0, nil)
 
-keep_alive = api.keep_alive(session_token)
+keep_alive = bf.keep_alive(session_token)
 
-logout = api.logout(session_token)
+logout = bf.logout(session_token)
