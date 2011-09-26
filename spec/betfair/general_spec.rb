@@ -28,14 +28,14 @@ module Betfair
       end
     end
     
-    Work out how to to later if really need to
-    describe "keep alive fail"  do
-      it "should return an error" do
-        savon.expects(:keep_alive).returns(:fail) # Using Savon Spec gem
-        error_code = Betfair::General.new.keep_alive('asdsad') 
-        error_code.should_not be_nil        
-      end
-    end
+    # Work out how to to later if really need to
+    # describe "keep alive fail"  do
+    #   it "should return an error" do
+    #     savon.expects(:keep_alive).returns(:fail) # Using Savon Spec gem
+    #     error_code = Betfair::General.new.keep_alive('asdsad') 
+    #     error_code.should_not be_nil        
+    #   end
+    # end
     
     describe "logout success"  do
       it "should return a session token" do
