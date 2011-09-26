@@ -1,0 +1,11 @@
+==============
+General API
+============== 
+
+bf = Betfair::General.new()
+
+session_token = bf.login('username', 'password', 82, 0, 0, nil)
+
+keep_alive = api.keep_alive(session_token)
+
+logout = api.logout(session_token)
