@@ -14,52 +14,33 @@ module Betfair
                     }
       end
       
-      if check_response(:login_response, response) == true
-        return response.to_hash[:login_response][:result][:header][:session_token] 
-      else
-        return response.to_hash[:login_response][:result][:error_code]
-      end
+      check_response(response.to_hash[:login_response][:result][:header])       
     end
     
     def keep_alive(session_token)
       response = @global_service.request :bf, :keepAlive do 
         soap.body = { 'bf:request' => { :header => api_request_header(session_token) } }
-      end
-      
-      if check_response(:keep_alive_response, response) == true
-        return response.to_hash[:keep_alive_response][:result][:header][:session_token] 
-      else
-        return response.to_hash[:keep_alive_response][:result][:error_code]
-      end
-      
+      end      
+      check_response(response.to_hash[:keep_alive_response][:result][:header])       
     end
   
     def logout(session_token)
       response = @global_service.request :bf, :logout do 
         soap.body = { 'bf:request' => { :header => api_request_header(session_token) } }
-      end
-      
-      if check_response(:logout_response, response) == true
-        return response.to_hash[:logout_response][:result][:header][:session_token] 
-      else
-        return response.to_hash[:logout_response][:result][:error_code]
-      end
+      end      
+      check_response(response.to_hash[:logout_response][:result][:header]) 
     end
         
     def exchange(exchange_id)   
-      if exchange_id == 2   
-        return @aus_service 
-      else
-        return @uk_service
-      end
+      exchange_id == 2  ? @aus_service : @uk_service
     end
 
     def api_request_header(session_token)      
       return { :client_stamp => 0, :session_token => session_token }
     end
 
-    def check_response(response_symbol, response)
-  		return true if response.to_hash[response_symbol][:result][:header][:error_code] == 'OK'
+    def check_response(response_header)      
+      response_header[:error_code] == 'OK' ? response_header[:session_token] : response_header[:error_code]
   	end
 
   	def initialize
