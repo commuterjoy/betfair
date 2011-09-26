@@ -1,9 +1,7 @@
-# bf = Betfair::API.new()
 module Betfair
 
   class General
               
-    # session_token = bf.login('username', 'password', 82, 0, 0, nil)
     def login(username, password, product_id, vendor_software_id, location_id, ip_address)
       response = @global_service.request :bf, :login do 
         soap.body = { 'bf:request' => { :username => username, 
@@ -23,7 +21,6 @@ module Betfair
       end
     end
     
-    # keep_alive = api.keep_alive(session_token)
     def keep_alive(session_token)
       response = @global_service.request :bf, :keepAlive do 
         soap.body = { 'bf:request' => { :header => api_request_header(session_token) } }
@@ -37,7 +34,6 @@ module Betfair
       
     end
   
-    # logout = api.logout(session_token)
     def logout(session_token)
       response = @global_service.request :bf, :logout do 
         soap.body = { 'bf:request' => { :header => api_request_header(session_token) } }
