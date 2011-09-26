@@ -36,7 +36,7 @@ module Betfair
     end
 
     def api_request_header(session_token)      
-      return { :client_stamp => 0, :session_token => session_token }
+      { :client_stamp => 0, :session_token => session_token }
     end
 
     def check_response(response_header)      
