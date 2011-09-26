@@ -1,6 +1,5 @@
-+++++++++++
-General API
-+++++++++++
+
+GENERAL LOGIN ET ALL
 
 bf = Betfair::General.new()
 
