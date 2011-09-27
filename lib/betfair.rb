@@ -1,5 +1,4 @@
 require 'savon'
-Savon.log = false
 require 'betfair/version'
 require 'betfair/general'
 require 'betfair/read'

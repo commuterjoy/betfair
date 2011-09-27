@@ -43,21 +43,26 @@ module Betfair
       response_header[:error_code] == 'OK' ? response_header[:session_token] : response_header[:error_code]
   	end
 
-  	def initialize
-
+  	def initialize(proxy = nil, logging = nil)
+      
+      logging == true ? Savon.log = true : Savon.log = false
+  		
   		@global_service = Savon::Client.new do |wsdl, http|
   		  wsdl.endpoint = 'https://api.betfair.com/global/v3/BFGlobalService'
   		  wsdl.namespace = 'https://www.betfair.com/global/v3/BFGlobalService'		     
+  		  http.proxy = proxy if !proxy.nil?
   		end
 
   		@uk_service = Savon::Client.new do |wsdl, http|
   		  wsdl.endpoint = 'https://api.betfair.com/exchange/v5/BFExchangeService'
         wsdl.namespace = 'http://www.betfair.com/exchange/v3/BFExchangeService/UK'
+        http.proxy = proxy if !proxy.nil?
   		end
 
   		@aus_service = Savon::Client.new do |wsdl, http|
   		  wsdl.endpoint = 'https://api-au.betfair.com/exchange/v5/BFExchangeService'
   		  wsdl.namespace = 'http://www.betfair.com/exchange/v3/BFExchangeService/AUS'
+  		  http.proxy = proxy if !proxy.nil?
   		end
 
   	end
