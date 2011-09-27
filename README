@@ -32,17 +32,20 @@ logging = true
 bf = Betfair::General.new(proxy, logging)
 
 Proxy's can be useful if you want to host on a cloud service such as Heroku, as you will be denied access to the Betfair API from the USA. 
+
 Just proxy via a server from a country that Betfair allow's, such as the UK.
 
 At the heart of the Betfair API is the session_token. 
 
 In order to get one of these simply call:
+
 session_token = bf.login('username', 'password', 82, 0, 0, nil)
 
 Username and Password are fairly obvious.
-82 is the standard Product Id, you may have a different one depending on the level of Betfair API access that you have.
-You can ignore the rest as leave as is, but they refer to Vendor Software Id, Location Id, Ip Address as required by the Betfair API.
 
+82 is the standard Product Id, you may have a different one depending on the level of Betfair API access that you have.
+
+You can ignore the rest as leave as is, but they refer to Vendor Software Id, Location Id, Ip Address as required by the Betfair API.
 
 Some other useful calls for the General API are :
 
