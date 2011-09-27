@@ -8,7 +8,7 @@ Installation
 
 Betfair is available through [Rubygems](http://rubygems.org/gems/betfair) and can be installed via:
 
-gem install betfair
+gem install betfair OR with bundler: gem 'betfair' and `bundle install`
 
 ------------
 Introduction
