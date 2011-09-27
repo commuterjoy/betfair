@@ -1,7 +1,24 @@
 module Betfair
 
   class API
-      
+        
+  	def get_market(session_token, exchange_id, market_id)
+  		response = exchange(exchange_id).request :bf, :getMarket do
+  			soap.body = { 'bf:request' => { :header => api_request_header(session_token), :marketId => market_id } }
+  		end
+
+  		error_code = response.to_hash[:get_market_response][:result][:error_code]
+  		error_code == 'OK' ? response.to_hash[:get_market_response][:result][:market] : error_code
+  	end
+    
+    def get_market_prices_compressed(session_token, exchange_id, market_id, currency_code = nil)
+      response = exchange(exchange_id).request :bf, :getMarketPricesCompressed do
+       soap.body = { 'bf:request' => { :header => api_request_header(session_token),  :marketId => market_id, :currencyCode => currency_code } }
+      end
+      error_code = response.to_hash[:get_market_prices_compressed_response][:result][:error_code]      
+      return error_code == 'OK' ? response.to_hash[:get_market_prices_compressed_response][:result][:market_prices] : error_code
+    end
+            
     def get_all_markets(session_token, exchange_id, event_type_ids = nil, locale = nil, countries = nil, from_date = nil, to_date = nil)
       response = exchange(exchange_id).request :bf, :getAllMarkets do
         soap.body = { 'bf:request' => { :header => api_request_header(session_token), 
@@ -11,11 +28,11 @@ module Betfair
                                         :toDate => to_date 
                                       } 
                     }
-      end
-      return response.to_hash[:get_all_markets_response][:result][:market_data] if check_response(:get_all_markets_response, response) == true
+      end            
+      error_code = response.to_hash[:get_all_markets_response][:result][:error_code]      
+      return error_code == 'OK' ? response.to_hash[:get_all_markets_response][:result][:market_data] : error_code      
     end
-    
-              
+                  
     def login(username, password, product_id, vendor_software_id, location_id, ip_address)
       response = @global_service.request :bf, :login do 
         soap.body = { 'bf:request' => { :username => username, 
@@ -28,23 +45,9 @@ module Betfair
                     }
       end
       
-      check_response(response.to_hash[:login_response][:result][:header])       
+      session_token(response.to_hash[:login_response][:result][:header])       
     end
-    
-    def keep_alive(session_token)
-      response = @global_service.request :bf, :keepAlive do 
-        soap.body = { 'bf:request' => { :header => api_request_header(session_token) } }
-      end      
-      check_response(response.to_hash[:keep_alive_response][:result][:header])       
-    end
-  
-    def logout(session_token)
-      response = @global_service.request :bf, :logout do 
-        soap.body = { 'bf:request' => { :header => api_request_header(session_token) } }
-      end      
-      check_response(response.to_hash[:logout_response][:result][:header]) 
-    end
-        
+      
     def exchange(exchange_id)   
       exchange_id == 2  ? @aus_service : @uk_service
     end
@@ -52,8 +55,8 @@ module Betfair
     def api_request_header(session_token)      
       { :client_stamp => 0, :session_token => session_token }
     end
-
-    def check_response(response_header)      
+    
+    def session_token(response_header)      
       response_header[:error_code] == 'OK' ? response_header[:session_token] : response_header[:error_code]
   	end
 
