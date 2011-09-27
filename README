@@ -1,16 +1,20 @@
+===========
 BETFAIR API
 ===========
 
+------------
 Installation
 ------------
 
 Betfair is available through [Rubygems](http://rubygems.org/gems/betfair) and can be installed via:
+
 gem install betfair
 
-
+------------
 Introduction
 ------------
 irb
+
 require 'betfair'
 
 or from a Gemfile
@@ -44,3 +48,49 @@ Some other useful calls for the General API are :
 
 keep_alive = bf.keep_alive(session_token)
 logout = bf.logout(session_token)
+
+-----
+Read
+-----
+
+-------
+Account
+-------
+
+---
+Bet
+---
+
+------------
+Requirements
+------------
+savon
+
+------------------------
+Requirements for testing
+------------------------
+savon_spec
+rspec
+rake
+simplecov
+
+----------
+Contribute
+----------
+I have only added the Betfair API method calls that I need and have simply stubbed out the rest. 
+
+Feel free to fork this repo, add what you need to with the relevant RSpec tests and send me a pull request.
+
+-------
+License
+-------
+
+(The MIT License)
+
+Copyright (c) 2011 Luke Byrne
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
