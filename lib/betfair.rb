@@ -1,6 +1,3 @@
 require 'savon'
 require 'betfair/version'
-require 'betfair/general'
-require 'betfair/read'
-require 'betfair/bet'
-require 'betfair/account'
+require 'betfair/api'

@@ -1,6 +1,20 @@
 module Betfair
 
-  class General
+  class API
+      
+    def get_all_markets(session_token, exchange_id, event_type_ids = nil, locale = nil, countries = nil, from_date = nil, to_date = nil)
+      response = exchange(exchange_id).request :bf, :getAllMarkets do
+        soap.body = { 'bf:request' => { :header => api_request_header(session_token), 
+                                        :eventTypeIds => { 'int' => event_type_ids }, 
+                                        :locale => locale, :countries => { 'country' => countries}, 
+                                        :fromDate => from_date, 
+                                        :toDate => to_date 
+                                      } 
+                    }
+      end
+      return response.to_hash[:get_all_markets_response][:result][:market_data] if check_response(:get_all_markets_response, response) == true
+    end
+    
               
     def login(username, password, product_id, vendor_software_id, location_id, ip_address)
       response = @global_service.request :bf, :login do 

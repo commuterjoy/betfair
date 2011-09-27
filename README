@@ -21,9 +21,8 @@ or from a Gemfile
 
 gem 'betfair'
 
-
 # create a client for the General API so that you can log in.
-bf = Betfair::General.new
+bf = Betfair::API.new
 
 If you want to use a proxy or turn on Savon's logging then just pass in like so:
 
@@ -49,8 +48,8 @@ You can ignore the rest as leave as is, but they refer to Vendor Software Id, Lo
 
 Some other useful calls for the General API are :
 
-keep_alive = bf.keep_alive(session_token)
-logout = bf.logout(session_token)
+bf.keep_alive(session_token)
+bf.logout(session_token)
 
 -----
 Read
@@ -80,7 +79,7 @@ simplecov
 ----------
 Contribute
 ----------
-I have only added the Betfair API method calls that I need and have simply stubbed out the rest. 
+I have only added the Betfair API method calls that I need. 
 
 Feel free to fork this repo, add what you need to with the relevant RSpec tests and send me a pull request.
 
