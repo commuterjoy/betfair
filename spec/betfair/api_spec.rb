@@ -10,6 +10,15 @@ module Betfair
       @helpers = Betfair::Helpers.new
     end
     
+    describe "Create a hash for the market details"  do
+      it "pulls the relevant stuff out of market details and puts it in a hash" do
+        savon.expects(:get_market).returns(:success)
+        market = @bf.get_market(@session_token, 2, 10038633)
+        market_info = @helpers.market_info(market)
+        market_info.should_not be_nil        
+      end
+    end
+    
     describe "Cleans up the get market details"  do
       it "sort the runners for each market out " do
         savon.expects(:get_market).returns(:success)
@@ -19,8 +28,8 @@ module Betfair
       end
     end
 
-    describe "Cleans up the prices string"  do
-      it "busts the prices string into a key value hash" do
+    describe "Get the price string for a runner"  do
+      it "so that we can combine it together with market info" do
         savon.expects(:get_market_prices_compressed).returns(:success)
         prices = @bf.get_market_prices_compressed(@session_token, 2, 10038633)
         prices = @helpers.prices(prices)
@@ -63,7 +72,7 @@ module Betfair
       it "should return an error message given the exchange id and and array of market type ids and no session id" do
         savon.expects(:get_all_markets).returns(:fail)
         error_code = @bf.get_all_markets(@session_token, 1, [1,3], nil, nil, nil, nil)        
-        error_code.should_not be_nil        
+        error_code.should eq('API_ERROR')        
       end
     end
 
@@ -79,7 +88,7 @@ module Betfair
       it "should return an error message given the wrong exchange id or market id" do
         savon.expects(:get_market).returns(:fail)
         error_code = @bf.get_market(@session_token, 2, 10038633)        
-        error_code.should_not be_nil        
+        error_code.should eq('INVALID_MARKET')        
       end
     end
 
@@ -87,7 +96,7 @@ module Betfair
       it "should return comrpessed market prices given the exchange id and market id" do
         savon.expects(:get_market_prices_compressed).returns(:success)
         market = @bf.get_market_prices_compressed(@session_token, 2, 10038633)        
-        market.should_not be_nil        
+        market.should_not be_nil      
       end
     end
 
@@ -95,7 +104,7 @@ module Betfair
       it "should return an error message given the wrong exchange id or market id" do
         savon.expects(:get_market_prices_compressed).returns(:fail)
         error_code = @bf.get_market_prices_compressed(@session_token, 2, 10038633)        
-        error_code.should_not be_nil        
+        error_code.should eq('INVALID_MARKET')        
       end
     end
 
@@ -110,8 +119,8 @@ module Betfair
     describe "login success"  do
       it "should return a session token" do
         savon.expects(:login).returns(:success)
-        session_token = @bf.login('username', 'password', 82, 0, 0, nil) 
-        session_token.should_not be_nil        
+        session_token = @bf.login('username', 'password', 82, 0, 0, nil).to_s
+        session_token.should be_an_instance_of(String)        
       end
     end
 
@@ -119,7 +128,7 @@ module Betfair
       it "should return an error" do
         savon.expects(:login).returns(:fail)
         error_code = @bf.login('username', 'password', 82, 0, 0, nil) 
-        error_code.should_not be_nil        
+        error_code.should eq('PRODUCT_REQUIRES_FUNDED_ACCOUNT')        
       end
     end
 
@@ -127,8 +136,8 @@ module Betfair
       it "should return a session token" do
         savon.expects(:login).returns(:success)        
         proxy = 'http://localhost:8888'
-        session_token = Betfair::API.new(proxy).login('username', 'password', 82, 0, 0, nil) 
-        session_token.should_not be_nil        
+        session_token = Betfair::API.new(proxy).login('username', 'password', 82, 0, 0, nil).to_s
+        session_token.should be_an_instance_of(String)    
       end
     end
 
@@ -136,8 +145,8 @@ module Betfair
       it "should return an error" do
         savon.expects(:login).returns(:fail)
         proxy = 'http://localhost:8888'
-        error_code = Betfair::API.new(proxy).login('username', 'password', 82, 0, 0, nil) 
-        error_code.should_not be_nil        
+        error_code = Betfair::API.new(proxy).login('username', 'password', 82, 0, 0, nil)
+        error_code.should eq('PRODUCT_REQUIRES_FUNDED_ACCOUNT')         
       end
     end
 
@@ -146,8 +155,8 @@ module Betfair
         savon.expects(:login).returns(:success)
         proxy = nil
         logging = true
-        session_token =  Betfair::API.new(proxy, logging).login('username', 'password', 82, 0, 0, nil)
-        session_token.should_not be_nil        
+        session_token =  Betfair::API.new(proxy, logging).login('username', 'password', 82, 0, 0, nil).to_s
+        session_token.should be_an_instance_of(String)    
       end
     end
 

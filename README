@@ -55,7 +55,10 @@ markets = bf.get_all_markets(session_token, 1, [1,3], nil, nil, nil, nil)
 details = bf.get_market(session_token, 2, 100386338)
 prices = bf.get_market_prices_compressed(session_token, 2, 100386338)
 
-combine = Betfair::Helpers.new.combine(details, prices)
+helpers = Betfair::Helpers.new
+
+helpers.market_info(details)
+helpers.combine(details, prices)
 
 ---
 Bet
@@ -73,6 +76,13 @@ savon_spec
 rspec
 rake
 simplecov
+
+
+----------
+To Do
+----------
+- Add some .nil? methods on the Betfair::Helper.new.combine and price_string
+
 
 ----------
 Contribute

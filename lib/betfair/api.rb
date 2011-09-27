@@ -88,15 +88,26 @@ module Betfair
   
   class Helpers  	
   	
+  	def market_info(details)
+  	  { :exchange_id => nil,
+  	    :market_type_id => nil,
+  	    :market_matched => nil,
+  	    :menu_path => details[:menu_path], 
+  	    :market_id => details[:market_id], 
+  	    :market_name => details[:name],
+  	    :market_type_name => details[:menu_path].to_s.split('\\')[1]
+  	  }
+  	end
+  	
   	def combine(market, prices)
   	  market = details(market)            
   	  prices = prices(prices)
 			market[:runners].each do |runner|
-				p = { :prices => prices[runner[:id]] }
-				runner.merge!(p)
+				runner.merge!({ :market_type_id => market[:market_type_id] })
+				runner.merge!(price_string(prices[runner[:id]]))
 			end
   	end
-  	
+  	  	  	  	
 		def details(market)
 			runners = []
 			market[:runners][:runner].each { |runner| runners << { :id => runner[:selection_id].to_i, :name => runner[:name] } }
@@ -114,6 +125,45 @@ module Betfair
 			return price_hash
   	end
   	
+  	def price_string(string)
+  	  string_raw = string
+  	  string = string.split('|')
+  	  price = { }        			
+		  
+			if !string[0].nil?
+			  str = string[0].split('~')	
+			  price[:prices_string] = string_raw
+				price[:runner_matched] = str[2].to_f
+				price[:last_back_price]   = str[3].to_f
+			end
+		  
+		  # Get the b prices (which are actually the l prices)
+			if !string[1].nil?
+			  b = string[1].split('~')	
+				price[:b1]             = b[0].to_f if !b[0].nil?
+				price[:b1_available]   = b[1].to_f if !b[1].nil?
+				price[:b2]             = b[4].to_f if !b[5].nil?
+				price[:b2_available]   = b[5].to_f if !b[6].nil?
+				price[:b3]             = b[8].to_f if !b[8].nil?
+				price[:b3_available]   = b[9].to_f if !b[9].nil?  				 				
+				combined_b = price[:b1] + price[:b2] + price[:b3]
+			end				
+		 
+		  # Get the l prices (which are actually the l prices)
+			if !string[2].nil?
+			  l = string[2].split('~')
+				price[:l1]             = l[0].to_f if !l[0].nil?
+				price[:l1_available]   = l[1].to_f if !l[1].nil?
+				price[:l2]             = l[4].to_f if !l[4].nil?
+				price[:l2_available]   = l[5].to_f if !l[5].nil?
+				price[:l3]             = l[8].to_f if !l[8].nil?
+				price[:l3_available]   = l[9].to_f if !l[9].nil?  				  				
+				combined_l = price[:l1] + price[:l2] + price[:l3]
+			end			
+			price[:wom] = combined_b / ( combined_b + combined_l ) if !combined_b.nil? and !combined_l.nil?
+			return price			  		
+  	end
+
   end
 	  
 end
