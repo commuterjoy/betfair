@@ -50,15 +50,12 @@ You can ignore the rest as leave as is, but they refer to Vendor Software Id, Lo
 Read
 -----
 
-markets = bf.get_all_markets(session_token, 2, [1,3], nil, nil, nil, nil)
-markets.split(':').each do |market|
-		puts '------------------------'
-	puts market.to_s.split('~')
-end
+markets = bf.get_all_markets(session_token, 1, [1,3], nil, nil, nil, nil)
 
-market = bf.get_market(session_token, 2, 100314276)
+details = bf.get_market(session_token, 2, 100386338)
+prices = bf.get_market_prices_compressed(session_token, 2, 100386338)
 
-market_prices_compressed = bf.get_market_prices_compressed(session_token, 1, 102589175)
+combine = Betfair::Helpers.new.combine(details, prices)
 
 ---
 Bet

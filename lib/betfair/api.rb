@@ -1,5 +1,5 @@
 module Betfair
-
+  
   class API
         
   	def get_market(session_token, exchange_id, market_id)
@@ -86,4 +86,34 @@ module Betfair
       
   end
   
+  class Helpers  	
+  	
+  	def combine(market, prices)
+  	  market = details(market)            
+  	  prices = prices(prices)
+			market[:runners].each do |runner|
+				p = { :prices => prices[runner[:id]] }
+				runner.merge!(p)
+			end
+  	end
+  	
+		def details(market)
+			runners = []
+			market[:runners][:runner].each { |runner| runners << { :id => runner[:selection_id].to_i, :name => runner[:name] } }
+			return { :market_type_id => market[:event_type_id].to_i, :runners => runners }
+	  end
+
+  	def prices(prices)
+			price_hash = {}					
+			prices.gsub! '\:', "\0"
+			pieces = prices.split ":"
+			pieces.each do |piece|
+				piece.gsub! "\0", '\:'
+				price_hash[piece.split('~')[0].to_i] = piece
+			end
+			return price_hash
+  	end
+  	
+  end
+	  
 end
