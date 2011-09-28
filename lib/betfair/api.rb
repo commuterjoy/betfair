@@ -88,6 +88,11 @@ module Betfair
   
   class Helpers  	
   	
+  	def mash(session_token, exchange_id, market_id)
+       bf = Betfair::API.new
+       combine( bf.get_all_markets(session_token, exchange_id, market_id), bf.get_market_prices_compressed(session_token, exchange_id, market_id) )
+  	end
+  	
   	def market_info(details)
   	  { :exchange_id => nil,
   	    :market_type_id => nil,
