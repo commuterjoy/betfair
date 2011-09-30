@@ -109,13 +109,13 @@ module Betfair
   	  prices = prices(prices)
 			market[:runners].each do |runner|
 				runner.merge!({ :market_type_id => market[:market_type_id] })
-				runner.merge!(price_string(prices[runner[:id]]))
+				runner.merge!(price_string(prices[runner[:runner_id]]))
 			end
   	end
   	  	  	  	
 		def details(market)
 			runners = []
-			market[:runners][:runner].each { |runner| runners << { :id => runner[:selection_id].to_i, :name => runner[:name] } }
+			market[:runners][:runner].each { |runner| runners << { :runner_id => runner[:selection_id].to_i, :runner_name => runner[:name] } }
 			return { :market_type_id => market[:event_type_id].to_i, :runners => runners }
 	  end
 
