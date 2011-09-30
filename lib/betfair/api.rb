@@ -133,7 +133,11 @@ module Betfair
   	def price_string(string)
   	  string_raw = string
   	  string = string.split('|')
-  	  price = { }        			
+
+  	  price = { :prices_string => nil, :runner_matched => 0, :last_back_price => 0, :wom => 0, 
+		             :b1 => 0, :b1_available => 0, :b2 => 0, :b2_available => 0, :b3 => 0, :b3_available => 0,
+		             :l1 => 0, :l1_available => 0, :l2 => 0, :l2_available => 0, :l3 => 0, :l3_available => 0 
+		          }    			
 		  
 			if !string[0].nil?
 			  str = string[0].split('~')	
