@@ -53,6 +53,48 @@ module Betfair
 
   end
 
+  describe "Placing and cancelling bets" do
+    
+    before(:all) do 
+      @bf = Betfair::API.new
+      @session_token = @bf.login('username', 'password', 82, 0, 0, nil) 
+    end
+    
+    describe "place bet success"  do
+      it "should place a bet on the exchange via the api" do
+        savon.expects(:place_bets).returns(:success)
+        bet = @bf.place_bet(@session_token, 1, 104184109, 58805, 'B', 10.0, 5.0)       
+        bet.should_not be_nil
+      end
+    end
+    
+    describe "place bet fail"  do
+      it "should return an error message" do
+        savon.expects(:place_bets).returns(:fail)
+        error_code = @bf.place_bet(@session_token, 1, 104184109, 58805, 'B', 2.0, 2.0)       
+        error_code[:result_code].should eq('INVALID_SIZE')
+      end
+    end
+    
+    describe "cancel bet success"  do
+      it "should cancel a bet on the exchange via the api" do
+        savon.expects(:cancel_bets).returns(:success)
+        bet = @bf.cancel_bet(@session_token, 3, 16939689578)       
+        bet.should_not be_nil
+      end
+    end
+    
+    describe "cancel bet fail"  do
+      it "should fail to cancel a bet on the exchange via the api" do
+        savon.expects(:cancel_bets).returns(:fail)
+        error_code = @bf.cancel_bet(@session_token, 3, 16939689578)        
+        error_code.should eq('API_ERROR')
+      end
+    end
+    
+  end
+  
+  
   describe "Basic read methods from the API" do 
 
     before(:all) do 

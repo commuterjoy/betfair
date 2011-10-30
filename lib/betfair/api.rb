@@ -1,6 +1,23 @@
 module Betfair
   
   class API
+    
+    def place_bet(session_token, exchange_id, market_id, runner_id, bet_type, price, size)		
+      bf_bet = { :marketId => market_id, :selectionId => runner_id, :betType => bet_type, :price => price, :size => size, :asianLineId => 0, :betCategoryType => 'E', :betPersistenceType => 'NONE', :bspLiability => 0 }      
+      response = exchange(exchange_id).request :bf, :placeBets do
+        soap.body = { 'bf:request' => { :header => api_request_header(session_token), :bets => { 'PlaceBets' => [bf_bet] } } }
+      end      
+      error_code = response.to_hash[:place_bets_response][:result][:error_code]
+  		return error_code == 'OK' ? response.to_hash[:place_bets_response][:result][:bet_results][:place_bets_result] : error_code  		
+    end
+
+    def cancel_bet(session_token, exchange_id, bet_id)
+      response = exchange(exchange_id).request :bf, :cancelBets do
+        soap.body = { 'bf:request' => { :header => api_request_header(session_token), :bets => { 'CancelBets' => [{ :betId => bet_id }] } } } # "CancelBets" has to be a string, not a symbol!
+      end		
+      error_code = response.to_hash[:cancel_bets_response][:result][:error_code]
+  		return error_code == 'OK' ? response.to_hash[:cancel_bets_response][:result][:bet_results][:cancel_bets_result] : error_code
+    end
         
   	def get_market(session_token, exchange_id, market_id)
   		response = exchange(exchange_id).request :bf, :getMarket do
@@ -8,7 +25,7 @@ module Betfair
   		end
 
   		error_code = response.to_hash[:get_market_response][:result][:error_code]
-  		error_code == 'OK' ? response.to_hash[:get_market_response][:result][:market] : error_code
+  		return error_code == 'OK' ? response.to_hash[:get_market_response][:result][:market] : error_code
   	end
     
     def get_market_prices_compressed(session_token, exchange_id, market_id, currency_code = nil)
@@ -55,7 +72,7 @@ module Betfair
     def api_request_header(session_token)      
       { :client_stamp => 0, :session_token => session_token }
     end
-    
+        
     def session_token(response_header)      
       response_header[:error_code] == 'OK' ? response_header[:session_token] : response_header[:error_code]
   	end
@@ -86,12 +103,7 @@ module Betfair
       
   end
   
-  class Helpers  	
-  	
-  	def mash(session_token, exchange_id, market_id)
-       bf = Betfair::API.new
-       combine( bf.get_all_markets(session_token, exchange_id, market_id), bf.get_market_prices_compressed(session_token, exchange_id, market_id) )
-  	end
+  class Helpers  	  	
   	
   	def market_info(details)
   	  { :exchange_id => nil,

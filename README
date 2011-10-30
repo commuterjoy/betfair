@@ -84,8 +84,6 @@ To Do
 - Add some error checking to the Betfair::Helper methods
 - Finish of the mash method, to return a nice hash of all market and runner info
 - Write a spec for the mashed method
-- Check coverage with simplecov
-
 
 ----------
 Contribute
