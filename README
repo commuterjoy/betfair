@@ -63,6 +63,8 @@ helpers.combine(details, prices)
 ---
 Bet
 ---
+bf.place_bet(session_token, 1, 104184109, 58805, 'B', 10.0, 5.0)
+bf.cancel_bet(session_token, 1, 16939730542)
 
 ------------
 Requirements
