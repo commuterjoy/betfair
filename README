@@ -26,7 +26,7 @@ bf = Betfair::API.new
 
 If you want to use a proxy or turn on Savon's logging then just pass in like so:
 
-proxy = 'http://localhost:8888' # This is a local squid proxy I tunnel to from my local machine to access the host server in UK for dev purposes.
+proxy = '	http://localhost:8888' # This is a local squid proxy I tunnel to from my local machine to access the host server in UK for dev purposes.
 logging = true
 bf = Betfair::API.new(proxy, logging)
 

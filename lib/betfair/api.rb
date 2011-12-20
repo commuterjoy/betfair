@@ -167,7 +167,7 @@ module Betfair
 				price[:b2_available]   = b[5].to_f if !b[6].nil?
 				price[:b3]             = b[8].to_f if !b[8].nil?
 				price[:b3_available]   = b[9].to_f if !b[9].nil?  				 				
-				combined_b = price[:b1] + price[:b2] + price[:b3]
+				combined_b = price[:b1_available] + price[:b2_available] + price[:b3_available]
 			end				
 		 
 		  # Get the l prices (which are actually the l prices)
@@ -179,7 +179,7 @@ module Betfair
 				price[:l2_available]   = l[5].to_f if !l[5].nil?
 				price[:l3]             = l[8].to_f if !l[8].nil?
 				price[:l3_available]   = l[9].to_f if !l[9].nil?  				  				
-				combined_l = price[:l1] + price[:l2] + price[:l3]
+				combined_l = price[:l1_available] + price[:l2_available] + price[:l3_available]
 			end			
 			price[:wom] = combined_b / ( combined_b + combined_l ) if !combined_b.nil? and !combined_l.nil?
 			return price			  		
