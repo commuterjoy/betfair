@@ -168,6 +168,13 @@ module Betfair
       end
     end
 
+    describe "no login credentials"  do
+      it "should not return a session token" do
+        bf = Betfair::API.new({})
+        bf.session_token.should be_nil
+      end
+    end
+    
     describe "login fail"  do
       it "should return an error" do
         savon.expects(:login).returns(:fail)
