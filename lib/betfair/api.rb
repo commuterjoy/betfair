@@ -2,43 +2,45 @@ module Betfair
   
   class API
     
-    def place_bet(session_token, exchange_id, market_id, runner_id, bet_type, price, size)		
+    attr_accessor :session_token, :error_code
+    
+    def place_bet(exchange_id, market_id, runner_id, bet_type, price, size)		
       bf_bet = { :marketId => market_id, :selectionId => runner_id, :betType => bet_type, :price => price, :size => size, :asianLineId => 0, :betCategoryType => 'E', :betPersistenceType => 'NONE', :bspLiability => 0 }      
       response = exchange(exchange_id).request :bf, :placeBets do
-        soap.body = { 'bf:request' => { :header => api_request_header(session_token), :bets => { 'PlaceBets' => [bf_bet] } } }
+        soap.body = { 'bf:request' => { :header => api_request_header, :bets => { 'PlaceBets' => [bf_bet] } } }
       end      
       error_code = response.to_hash[:place_bets_response][:result][:error_code]
   		return error_code == 'OK' ? response.to_hash[:place_bets_response][:result][:bet_results][:place_bets_result] : error_code  		
     end
 
-    def cancel_bet(session_token, exchange_id, bet_id)
+    def cancel_bet(exchange_id, bet_id)
       response = exchange(exchange_id).request :bf, :cancelBets do
-        soap.body = { 'bf:request' => { :header => api_request_header(session_token), :bets => { 'CancelBets' => [{ :betId => bet_id }] } } } # "CancelBets" has to be a string, not a symbol!
+        soap.body = { 'bf:request' => { :header => api_request_header, :bets => { 'CancelBets' => [{ :betId => bet_id }] } } } # "CancelBets" has to be a string, not a symbol!
       end		
       error_code = response.to_hash[:cancel_bets_response][:result][:error_code]
   		return error_code == 'OK' ? response.to_hash[:cancel_bets_response][:result][:bet_results][:cancel_bets_result] : error_code
     end
         
-  	def get_market(session_token, exchange_id, market_id)
+  	def get_market(exchange_id, market_id)
   		response = exchange(exchange_id).request :bf, :getMarket do
-  			soap.body = { 'bf:request' => { :header => api_request_header(session_token), :marketId => market_id } }
+  			soap.body = { 'bf:request' => { :header => api_request_header, :marketId => market_id } }
   		end
 
   		error_code = response.to_hash[:get_market_response][:result][:error_code]
   		return error_code == 'OK' ? response.to_hash[:get_market_response][:result][:market] : error_code
   	end
     
-    def get_market_prices_compressed(session_token, exchange_id, market_id, currency_code = nil)
+    def get_market_prices_compressed(exchange_id, market_id, currency_code = nil)
       response = exchange(exchange_id).request :bf, :getMarketPricesCompressed do
-       soap.body = { 'bf:request' => { :header => api_request_header(session_token),  :marketId => market_id, :currencyCode => currency_code } }
+       soap.body = { 'bf:request' => { :header => api_request_header,  :marketId => market_id, :currencyCode => currency_code } }
       end
       error_code = response.to_hash[:get_market_prices_compressed_response][:result][:error_code]      
       return error_code == 'OK' ? response.to_hash[:get_market_prices_compressed_response][:result][:market_prices] : error_code
     end
             
-    def get_all_markets(session_token, exchange_id, event_type_ids = nil, locale = nil, countries = nil, from_date = nil, to_date = nil)
+    def get_all_markets(exchange_id, event_type_ids = nil, locale = nil, countries = nil, from_date = nil, to_date = nil)
       response = exchange(exchange_id).request :bf, :getAllMarkets do
-        soap.body = { 'bf:request' => { :header => api_request_header(session_token), 
+        soap.body = { 'bf:request' => { :header => api_request_header, 
                                         :eventTypeIds => { 'int' => event_type_ids }, 
                                         :locale => locale, :countries => { 'country' => countries}, 
                                         :fromDate => from_date, 
@@ -61,22 +63,35 @@ module Betfair
                                        } 
                     }
       end
-      session_token(response.to_hash[:login_response][:result][:header])        
+      
+      response_header = response.to_hash[:login_response][:result][:header]
+      @error_code = response_header[:error_code]
+      @session_token = (response_header[:error_code].to_s === 'OK') ? response_header[:session_token].to_s : nil
     end
       
     def exchange(exchange_id)   
       exchange_id == 2  ? @aus_service : @uk_service
     end
 
-    def api_request_header(session_token)      
-      { :client_stamp => 0, :session_token => session_token }
+    def api_request_header      
+      { :client_stamp => 0, :session_token => @session_token }
     end
-        
-    def session_token(response_header)      
-      response_header[:error_code] == 'OK' ? response_header[:session_token] : response_header[:error_code]
-  	end
 
-  	def initialize(proxy = nil, logging = nil)
+    # 3/ refactor later to read from base64 encoded ~/.betfair/auth
+  	def initialize(options = {})
+      
+      config = { :proxy => nil,
+                 :logging => nil,
+                 :username => nil,
+                 :password => nil,
+                 :product_id => 82,
+                 :vendor_software_id => 0,
+                 :location_id => 0,
+                 :ip_address => nil
+                 }.merge!(options)
+    
+      proxy = config[:proxy]
+      logging = config[:logging]
       
       logging == true ? Savon.log = true : Savon.log = false
   		
@@ -98,6 +113,7 @@ module Betfair
   		  http.proxy = proxy if !proxy.nil?
   		end
 
+      self.login(config[:username], config[:password], config[:product_id], config[:vendor_software_id], config[:location_id], config[:ip_address])
   	end
       
   end

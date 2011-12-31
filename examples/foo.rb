@@ -1,12 +1,10 @@
 require 'betfair'
   
-bf = Betfair::API.new  
+bf = Betfair::API.new({:logging => true, :username => 'username', :password => 'password'})  
 helpers = Betfair::Helpers.new
 
-session_token = bf.login('username', 'password', 82, 0, 0, nil).to_s
-
 # This call just returns back a huge string, markets ar edeliminated by ':', run the split method to convert string to a array
-markets = bf.get_all_markets(session_token, 1, [1,3], nil, nil, nil, nil).split(':')
+markets = bf.get_all_markets(1, [1,3], nil, nil, nil, nil).split(':')
 
 # Loop though the markets array
 markets.each do |market| 
@@ -21,9 +19,9 @@ markets.each do |market|
   # Now lets just look for Match Odds for Tottenham for the English Premier League
   if market_name == 'Match Odds' and menu_path.include? 'Barclays Premier League' and menu_path.include? 'Tottenham'
     # Run the API call to get the Market Info
-    puts bf.get_market(session_token, 1, market_id)
+    puts bf.get_market(1, market_id)
     # Run the API call to get the prices
-    puts bf.get_market_prices_compressed(session_token, 1, market_id)
+    puts bf.get_market_prices_compressed(1, market_id)
   end
   
 end

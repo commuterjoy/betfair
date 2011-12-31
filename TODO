@@ -3,13 +3,17 @@ Sessions
 --------
 
 - Create a secure(ish) way of generating a session_token (probably read username from chmod 400 base64'd file)
-- Implement session tokens as described in the API (ie. check each response for a new token)
-
+- Implement session tokens as described in the API (to allow for long-running processes etc.)
+    - DONE refactor sessions out of all the method calls
+    - on receiving any api response replace the existing session token with the new one
+    - allow many processes to share a single token
+    
 General
 -------
 
 - Write simple models to represent the responses - markets, prices etc.
 - Write a commander command-line tool for all operations
+- Move helpers to different class
 
 Tests
 -----
