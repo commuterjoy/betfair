@@ -13,7 +13,7 @@ General
 
 - Write simple models to represent the responses - markets, prices etc.
 - Write a commander command-line tool for all operations
-- Move helpers to different class
+- DONE Move helpers to different class
 
 Tests
 -----
