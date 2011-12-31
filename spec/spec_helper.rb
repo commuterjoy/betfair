@@ -1,5 +1,4 @@
 require 'simplecov'
-SimpleCov.start
 
 require 'betfair'
 require 'savon_spec'

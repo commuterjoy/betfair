@@ -4,9 +4,10 @@ module Betfair
 
   describe "Helper methods for mashing the data from the API" do 
 
-    before(:all) do 
+    before(:all) do
       @bf = Betfair::API.new
-      @session_token = @bf.login('username', 'password', 82, 0, 0, nil) 
+      savon.expects(:login).returns(:success)
+      @session_token = @bf.login('username', 'password', 82, 0, 0, nil)
       @helpers = Betfair::Helpers.new
     end
     
@@ -57,6 +58,7 @@ module Betfair
     
     before(:all) do 
       @bf = Betfair::API.new
+      savon.expects(:login).returns(:success)      
       @session_token = @bf.login('username', 'password', 82, 0, 0, nil) 
     end
     
@@ -99,6 +101,7 @@ module Betfair
 
     before(:all) do 
       @bf = Betfair::API.new
+      savon.expects(:login).returns(:success)
       @session_token = @bf.login('username', 'password', 82, 0, 0, nil) 
     end    
 

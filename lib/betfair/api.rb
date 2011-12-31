@@ -61,8 +61,7 @@ module Betfair
                                        } 
                     }
       end
-      
-      session_token(response.to_hash[:login_response][:result][:header])       
+      session_token(response.to_hash[:login_response][:result][:header])        
     end
       
     def exchange(exchange_id)   

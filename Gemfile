@@ -6,7 +6,6 @@ gem 'gemcutter'
 
 gem 'rspec'
 gem 'savon_spec'
-gem 'simplecov' # https://github.com/colszowka/simplecov
 
 gemspec
 

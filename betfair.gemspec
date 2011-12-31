@@ -23,5 +23,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency  'rake'
   s.add_development_dependency  'rspec'
   s.add_development_dependency  'savon_spec'
-  s.add_development_dependency  'simplecov' # https://github.com/colszowka/simplecov
 end
