@@ -1,0 +1,17 @@
+
+Sessions
+--------
+
+- Create a secure(ish) way of generating a session_token (probably read username from chmod 400 base64'd file)
+- Implement session tokens as described in the API (ie. check each response for a new token)
+
+General
+-------
+
+- Write simple models to represent the responses - markets, prices etc.
+- Write a commander command-line tool for all operations
+
+Tests
+-----
+
+- Remove all external dependencies on the unit tests
