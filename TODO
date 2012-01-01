@@ -1,29 +1,33 @@
 
+S = small, M = medium, L = large, DONE = complete
+
 Sessions
 --------
 
-- DONE Create a secure(ish) way of generating a session_token (read a username from chmod 400, base64'd file)
-- Implement session tokens as described in the API (to allow for long-running processes etc.)
-    - DONE refactor sessions out of all the method calls
-    - DONE on receiving any api response replace the existing session token with the new one
-    - allow many processes to share a single token (persist session_token to a file)
+- DONE  Create a secure(ish) way of generating a session_token (read a username from chmod 400, base64'd file)
+- M     Implement session tokens as described in the API (to allow for long-running processes etc.)
+        - DONE refactor sessions out of all the method calls
+        - DONE on receiving any api response replace the existing session token with the new one
+        - allow many processes to share a single token (persist session_token to a file)
     
 General
 -------
 
-- Write simple models to represent the responses - markets, prices etc.
-- Write a commander command-line tool for all operations
-- DONE Move helpers to different class
-- A system to throttle the API so that many running processes off the same account don't breach the API rate limits.
+- S     Write simple models to represent the responses - markets, prices etc.
+- M     Write a commander command-line tool for all operations
+- DONE  Move helpers to different class
+- M     A system to throttle the API so that many running processes off the same account don't breach the API rate limits.
+- M     A system to cache the soap responses - probably using savon proxy + squid or varnish
+- S     Move credentials file reading stuff in to Betfair::Auth helper, Eg. auth = Betfair::Auth.new
 
 Tools
 -----
 
-- Market price logger, Ie. betfair log prices --market :id --interval :seconds --cap :int
-- List markets of a given category, Ie. betfair list markets --category 'Australian Soccer'
+- S     Market price logger, Ie. betfair log prices --market :id --interval :seconds --cap :int
+- S     List markets of a given category, Ie. betfair list markets --category 'Australian Soccer'
 
 Tests
 -----
 
-- DONE Remove all external dependencies on the unit tests
-- Added non HTTP 200 responses to test suite
+- DONE  Remove all external dependencies on the unit tests
+- S     Added non HTTP 200 responses to test suite
