@@ -22,38 +22,26 @@ or from a Gemfile
 gem 'betfair'
 
 # create a client for the General API so that you can log in.
-bf = Betfair::API.new
+bf = Betfair::API.new({:username => 'username', :password => 'password'})
 
 If you want to use a proxy or turn on Savon's logging then just pass in like so:
 
 proxy = '	http://localhost:8888' # This is a local squid proxy I tunnel to from my local machine to access the host server in UK for dev purposes.
 logging = true
-bf = Betfair::API.new(proxy, logging)
+bf = Betfair::API.new({:proxy => proxy, :logging => true, :username => 'username', :password => 'password'})
 
 Proxy's can be useful if you want to host on a cloud service such as Heroku, as you will be denied access to the Betfair API from the USA. 
 
 Just proxy via a server from a country that Betfair allow's, such as the UK.
 
-At the heart of the Betfair API is the session_token. 
-
-In order to get one of these simply call:
-
-session_token = bf.login('username', 'password', 82, 0, 0, nil)
-
-Username and Password are fairly obvious.
-
-82 is the standard Product Id, you may have a different one depending on the level of Betfair API access that you have.
-
-You can ignore the rest as leave as is, but they refer to Vendor Software Id, Location Id, Ip Address as required by the Betfair API.
-
 -----
 Read
 -----
 
-markets = bf.get_all_markets(session_token, 1, [1,3], nil, nil, nil, nil)
+markets = bf.get_all_markets(1, [1,3], nil, nil, nil, nil)
 
-details = bf.get_market(session_token, 2, 100386338)
-prices = bf.get_market_prices_compressed(session_token, 2, 100386338)
+details = bf.get_market(2, 100386338)
+prices = bf.get_market_prices_compressed(2, 100386338)
 
 helpers = Betfair::Helpers.new
 
@@ -63,8 +51,8 @@ helpers.combine(details, prices)
 ---
 Bet
 ---
-bf.place_bet(session_token, 1, 104184109, 58805, 'B', 10.0, 5.0)
-bf.cancel_bet(session_token, 1, 16939730542)
+bf.place_bet(1, 104184109, 58805, 'B', 10.0, 5.0)
+bf.cancel_bet(1, 16939730542)
 
 ------------
 Requirements
