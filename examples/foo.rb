@@ -1,3 +1,5 @@
+
+require 'rubygems'
 require 'betfair'
 require 'etc' 
 
