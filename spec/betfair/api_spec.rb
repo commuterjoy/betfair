@@ -55,6 +55,7 @@ module Api
       it "should return a hash of all markets given the exchange id and and array of market type ids" do
         savon.expects(:get_all_markets).returns(:success)
         markets = @bf.get_all_markets(1, [1,3], nil, nil, nil, nil)        
+        @bf.error_code.should eq('OK')      
         markets.should_not be_nil        
       end
     end
