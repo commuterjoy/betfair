@@ -1,3 +1,5 @@
+require 'Base64'
+
 module Betfair
   
   class API
@@ -8,8 +10,7 @@ module Betfair
       
       config = { :proxy => nil,
                  :logging => nil,
-                 :username => nil,
-                 :password => nil,
+                 :credentials => nil,
                  :product_id => 82,
                  :vendor_software_id => 0,
                  :location_id => 0,
@@ -39,11 +40,18 @@ module Betfair
   		  http.proxy = proxy if !proxy.nil?
   		end
 
-      if (config[:username] && config[:password]) then
-        self.login(config[:username], config[:password], config[:product_id], config[:vendor_software_id], config[:location_id], config[:ip_address])
+      if (config[:credentials]) then
+        auth = self.decode_credentials(config[:credentials])
+        self.login(auth[:username], auth[:password], config[:product_id], config[:vendor_software_id], config[:location_id], config[:ip_address])
       end
       
   	end
+
+    def decode_credentials(auth_token)
+      tokens = Base64.decode64(auth_token).split('|')
+      auth = { :username => tokens[0], :password => tokens[1] } 
+      auth
+    end
 
     def exchange(exchange_id)   
       exchange_id == 2  ? @aus_service : @uk_service

@@ -6,7 +6,7 @@ module Api
     
     before(:all) do 
       savon.expects(:login).returns(:success)      
-      @bf = Betfair::API.new({:username => 'username', :password => 'password'})
+      @bf = Betfair::API.new({:credentials => 'dXNlcm5hbWV8cGFzc3dvcmQ='})
     end
     
     describe "place bet success"  do
@@ -48,7 +48,7 @@ module Api
 
     before(:all) do 
       savon.expects(:login).returns(:success)      
-      @bf = Betfair::API.new({:username => 'username', :password => 'password'})
+      @bf = Betfair::API.new({:credentials => 'dXNlcm5hbWV8cGFzc3dvcmQ='})
     end
 
     describe "get all markets success"  do
@@ -107,7 +107,7 @@ module Api
     describe "login success"  do
       it "should return a session token" do
         savon.expects(:login).returns(:success)
-        bf = Betfair::API.new({:username => 'username', :password => 'password'})
+        bf = Betfair::API.new({:credentials => 'dXNlcm5hbWV8cGFzc3dvcmQ='})
         bf.session_token.should be_an_instance_of(String)
       end
     end
@@ -122,7 +122,7 @@ module Api
     describe "login fail"  do
       it "should return an error" do
         savon.expects(:login).returns(:fail)
-        bf = Betfair::API.new({:username => 'username', :password => 'password'})
+        bf = Betfair::API.new({:credentials => 'dXNlcm5hbWV8cGFzc3dvcmQ='})
         bf.error_code.should eq('PRODUCT_REQUIRES_FUNDED_ACCOUNT')
       end
     end
@@ -131,7 +131,7 @@ module Api
       it "should return a session token" do
         savon.expects(:login).returns(:success)
         proxy = 'http://localhost:8888'
-        bf = Betfair::API.new({:proxy => proxy, :username => 'username', :password => 'password'})
+        bf = Betfair::API.new({:proxy => proxy, :credentials => 'dXNlcm5hbWV8cGFzc3dvcmQ='})
         bf.session_token.should be_an_instance_of(String)
       end
     end
@@ -140,7 +140,7 @@ module Api
       it "should return an error" do
         savon.expects(:login).returns(:fail)
         proxy = 'http://localhost:8888'
-        bf = Betfair::API.new({:proxy => proxy, :username => 'username', :password => 'password'})
+        bf = Betfair::API.new({:proxy => proxy, :credentials => 'dXNlcm5hbWV8cGFzc3dvcmQ='})
         bf.error_code.should eq('PRODUCT_REQUIRES_FUNDED_ACCOUNT')         
       end
     end
@@ -148,7 +148,7 @@ module Api
     describe "savon logging on"  do
       it "should return a session token" do
         savon.expects(:login).returns(:success)
-        bf = Betfair::API.new({:proxy => nil, :logging => true, :username => 'username', :password => 'password'})
+        bf = Betfair::API.new({:proxy => nil, :logging => true, :credentials => 'dXNlcm5hbWV8cGFzc3dvcmQ='})
         bf.session_token.should be_an_instance_of(String)    
       end
     end

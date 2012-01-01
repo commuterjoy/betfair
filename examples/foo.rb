@@ -1,6 +1,6 @@
 require 'betfair'
   
-bf = Betfair::API.new({:logging => true, :username => 'username', :password => 'password'})  
+bf = Betfair::API.new({:logging => true, :credentials => 'dXNlcm5hbWV8cGFzc3dvcmQ='})  
 helpers = Betfair::Helpers.new
 
 # This call just returns back a huge string, markets ar edeliminated by ':', run the split method to convert string to a array
