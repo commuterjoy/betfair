@@ -20,7 +20,7 @@ module Api
     describe "place bet fail"  do
       it "should return an error message" do
         savon.expects(:place_bets).returns(:fail)
-        error_code = @bf.place_bet(1, 104184109, 58805, 'B', 2.0, 2.0)       
+        error_code = @bf.place_bet(1, 104184109, 58805, 'B', 2.0, 2.0)   
         error_code[:result_code].should eq('INVALID_SIZE')
       end
     end
@@ -114,8 +114,21 @@ module Api
 
     describe "no login credentials"  do
       it "should not return a session token" do
+        savon.expects(:login).never
         bf = Betfair::API.new({})
         bf.session_token.should be_nil
+      end
+    end
+
+    # make two requests, the second one should use the session token of the first response
+    describe "new session token sent by api"  do
+      it "should replace the current session token used" do
+        savon.expects(:login).returns(:success)
+        savon.expects(:placeBets).returns(:success)
+        
+        bf = Betfair::API.new({:credentials => 'dXNlcm5hbWV8cGFzc3dvcmQ='})
+        bf.place_bet(1, 104184109, 58805, 'B', 2.0, 2.0)
+        bf.session_token.should eq('T0fSCYclMyf2iuL4FbGQyoINXuNeaxpKxtAq/7VnAjo=')
       end
     end
     

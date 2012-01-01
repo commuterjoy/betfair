@@ -2,7 +2,7 @@
 Sessions
 --------
 
-- DONE Create a secure(ish) way of generating a session_token (read a username from chmod 400 base64'd file)
+- DONE Create a secure(ish) way of generating a session_token (read a username from chmod 400, base64'd file)
 - Implement session tokens as described in the API (to allow for long-running processes etc.)
     - DONE refactor sessions out of all the method calls
     - DONE on receiving any api response replace the existing session token with the new one
@@ -26,3 +26,4 @@ Tests
 -----
 
 - DONE Remove all external dependencies on the unit tests
+- Added non HTTP 200 responses to test suite

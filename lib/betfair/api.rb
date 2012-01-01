@@ -50,7 +50,6 @@ module Betfair
     def decode_credentials(auth_token)
       tokens = Base64.decode64(auth_token).split('|')
       auth = { :username => tokens[0], :password => tokens[1] } 
-      auth
     end
 
     def exchange(exchange_id)   
