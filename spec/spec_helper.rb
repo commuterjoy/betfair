@@ -1,5 +1,3 @@
-require 'simplecov'
-
 require 'betfair'
 require 'savon_spec'
 
