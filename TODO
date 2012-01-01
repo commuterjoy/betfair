@@ -6,7 +6,7 @@ Sessions
 - Implement session tokens as described in the API (to allow for long-running processes etc.)
     - DONE refactor sessions out of all the method calls
     - DONE on receiving any api response replace the existing session token with the new one
-    - allow many processes to share a single token
+    - allow many processes to share a single token (persist session_token to a file)
     
 General
 -------
@@ -14,6 +14,13 @@ General
 - Write simple models to represent the responses - markets, prices etc.
 - Write a commander command-line tool for all operations
 - DONE Move helpers to different class
+- A system to throttle the API so that many running processes off the same account don't breach the API rate limits.
+
+Tools
+-----
+
+- Market price logger, Ie. betfair log prices --market :id --interval :seconds --cap :int
+- List markets of a given category, Ie. betfair list markets --category 'Australian Soccer'
 
 Tests
 -----
