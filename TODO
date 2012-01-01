@@ -9,7 +9,7 @@ Sessions
         - DONE refactor sessions out of all the method calls
         - DONE on receiving any api response replace the existing session token with the new one
         - allow many processes to share a single token (persist session_token to a file)
-    
+
 General
 -------
 
@@ -17,8 +17,9 @@ General
 - M     Write a commander command-line tool for all operations
 - DONE  Move helpers to different class
 - M     A system to throttle the API so that many running processes off the same account don't breach the API rate limits.
-- M     A system to cache the soap responses - probably using savon proxy + squid or varnish
+- M     A system to cache the SOAP responses - probably using savon proxy + squid or varnish
 - S     Move credentials file reading stuff in to Betfair::Auth helper, Eg. auth = Betfair::Auth.new
+- S     Migrate exchange_id to the constructor as 99% of the time it's just set once
 
 Tools
 -----
