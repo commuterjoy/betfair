@@ -5,7 +5,7 @@ Sessions
 - Create a secure(ish) way of generating a session_token (probably read username from chmod 400 base64'd file)
 - Implement session tokens as described in the API (to allow for long-running processes etc.)
     - DONE refactor sessions out of all the method calls
-    - on receiving any api response replace the existing session token with the new one
+    - DONE on receiving any api response replace the existing session token with the new one
     - allow many processes to share a single token
     
 General
