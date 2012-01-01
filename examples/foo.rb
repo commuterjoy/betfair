@@ -1,6 +1,13 @@
 require 'betfair'
-  
-bf = Betfair::API.new({:logging => true, :credentials => 'dXNlcm5hbWV8cGFzc3dvcmQ='})  
+require 'etc' 
+
+# Eg, somewhere with a base64 encoded username and password string
+auth_file = Etc.getpwuid.dir + '/.betfair/auth'
+
+# either read the authentication tokens from a file, or default to using 'username|password'
+auth = (File.exists?(auth_file)) ? IO.read(auth_file) : 'dXNlcm5hbWV8cGFzc3dvcmQ='
+
+bf = Betfair::API.new({:logging => true, :credentials => auth})  
 helpers = Betfair::Helpers.new
 
 # This call just returns back a huge string, markets ar edeliminated by ':', run the split method to convert string to a array

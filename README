@@ -21,14 +21,22 @@ or from a Gemfile
 
 gem 'betfair'
 
-# create a client for the General API so that you can log in.
-bf = Betfair::API.new({:username => 'username', :password => 'password'})
+# create your username & password in a pipe delimited, base64 encoded string, ie. 'username|password'
+auth = 'dXNlcm5hbWV8cGFzc3dvcmQ'
+
+# OR, you might want to store your login details in a file and 'chmod 400' it
+auth = IO.read('~/.betfair/auth')
+
+# ... Nb. this *isn't* secure, but means you don't have to store your credentials in the application
+
+# create a client for the General API so that you can log in with the base64 credentials
+bf = Betfair::API.new({:credentials => auth})
 
 If you want to use a proxy or turn on Savon's logging then just pass in like so:
 
 proxy = '	http://localhost:8888' # This is a local squid proxy I tunnel to from my local machine to access the host server in UK for dev purposes.
 logging = true
-bf = Betfair::API.new({:proxy => proxy, :logging => true, :username => 'username', :password => 'password'})
+bf = Betfair::API.new({:proxy => proxy, :logging => true, :credentials => auth})
 
 Proxy's can be useful if you want to host on a cloud service such as Heroku, as you will be denied access to the Betfair API from the USA. 
 
