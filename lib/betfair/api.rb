@@ -63,12 +63,20 @@ module Betfair
         
     # generic interface between betfair API and our public methods
     def request(exchange_id, method, body)
+        
+      # make the soap request
       response = exchange(exchange_id).request :bf, method do
         soap.body = body
       end
-      obj = method.to_s.gsub(/([A-Z])/, '_\1').downcase + '_response' # derive the response object name - Eg, placeBets => place_bets_response
-      response_header = response.to_hash[obj.to_sym][:result][:header]
+      
+      # derive the response object symbole - Eg, placeBets => place_bets_response
+      response_name = (method.to_s.gsub(/([A-Z])/, '_\1').downcase + '_response').to_sym
+      
+      # assign response statuses
+      response_header = response.to_hash[response_name][:result][:header]
       @session_token = (response_header[:error_code].to_s === 'OK') ? response_header[:session_token].to_s : nil
+      @error_code = response.to_hash[response_name][:result][:error_code]
+      
       response
     end
     
@@ -77,7 +85,6 @@ module Betfair
       response = self.request(exchange_id, :placeBets, {
           'bf:request' => { :header => api_request_header, :bets => { 'PlaceBets' => [bf_bet] } } }
           )
-      @error_code = response.to_hash[:place_bets_response][:result][:error_code]
   		return @error_code == 'OK' ? response.to_hash[:place_bets_response][:result][:bet_results][:place_bets_result] : @error_code
     end
 
@@ -85,7 +92,6 @@ module Betfair
       response = self.request(exchange_id, :cancelBets, {
           'bf:request' => { :header => api_request_header, :bets => { 'CancelBets' => [{ :betId => bet_id }] } } }
           )
-      @error_code = response.to_hash[:cancel_bets_response][:result][:error_code]
   		return @error_code == 'OK' ? response.to_hash[:cancel_bets_response][:result][:bet_results][:cancel_bets_result] : @error_code
     end
         
@@ -93,7 +99,6 @@ module Betfair
       response = self.request(exchange_id, :getMarket, {
           'bf:request' => { :header => api_request_header, :marketId => market_id } }
           )
-  		@error_code = response.to_hash[:get_market_response][:result][:error_code]
   		return @error_code == 'OK' ? response.to_hash[:get_market_response][:result][:market] : @error_code
   	end
     
@@ -101,7 +106,6 @@ module Betfair
       response = self.request(exchange_id, :getMarketPricesCompressed, {      
         'bf:request' => { :header => api_request_header,  :marketId => market_id, :currencyCode => currency_code } }
         )
-      @error_code = response.to_hash[:get_market_prices_compressed_response][:result][:error_code]      
       return @error_code == 'OK' ? response.to_hash[:get_market_prices_compressed_response][:result][:market_prices] : @error_code
     end
             
@@ -115,7 +119,6 @@ module Betfair
                                       } 
                     }
         )
-      @error_code = response.to_hash[:get_all_markets_response][:result][:error_code]      
       return @error_code == 'OK' ? response.to_hash[:get_all_markets_response][:result][:market_data] : @error_code      
     end
                   
