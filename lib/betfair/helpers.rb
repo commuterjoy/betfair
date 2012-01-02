@@ -3,13 +3,16 @@ module Betfair
   class Helpers  	  	
 	
   	def market_info(details)
+  	  runners = []
+  	  details[:runners][:runner].each { |runner| runners << { :runner_id => runner[:selection_id].to_i, :runner_name => runner[:name] } }
   	  { :exchange_id => nil,
   	    :market_type_id => nil,
   	    :market_matched => nil,
   	    :menu_path => details[:menu_path], 
   	    :market_id => details[:market_id], 
   	    :market_name => details[:name],
-  	    :market_type_name => details[:menu_path].to_s.split('\\')[1]
+  	    :market_type_name => details[:menu_path].to_s.split('\\')[1],
+  	    :runners => runners
   	  }
   	end
 	

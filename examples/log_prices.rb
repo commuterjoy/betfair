@@ -9,8 +9,21 @@ auth = IO.read(Etc.getpwuid.dir + '/.betfair/auth')
 mid = ARGV[0]
 interval = 10
 
-bf = Betfair::API.new({ :credentials => auth, :logging => false })  
+bf = Betfair::API.new({ :credentials => auth })  
 helpers = Betfair::Helpers.new
+
+market = bf.get_market(1, mid)
+market_info = helpers.market_info(market)
+
+puts "market:"
+puts "  - ID: #{market_info[:market_id]}"
+puts "  - Path: #{market_info[:menu_path]}"
+puts "  - MarketName: #{market_info[:market_name]}"
+puts "  - MarketTypeName: #{market_info[:market_type_name]}"
+market_info[:runners].each do |runner|
+  puts "  - Name: #{runner[:runner_name]}"
+  puts "    SelectionID: #{runner[:runner_id]}"
+end
 
 while 1
   

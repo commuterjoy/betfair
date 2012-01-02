@@ -13,7 +13,7 @@ Sessions
 General
 -------
 
-- S     Write simple models to represent the responses - markets, prices etc.
+- S     Write simple models to represent the responses - markets, prices etc. (kind of replaces most of the helpers?)
 - M     Write a commander command-line tool for all operations
 - DONE  Move helpers to different class
 - M     A system to throttle the API so that many running processes off the same account don't breach the API rate limits.
