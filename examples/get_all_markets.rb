@@ -6,10 +6,12 @@ require 'ostruct'
 
 auth = IO.read(Etc.getpwuid.dir + '/.betfair/auth')
 
+events = (ARGV.first) ? ARGV.first.split(',') : [3]
+
 bf = Betfair::API.new({ :logging => false, :credentials => auth })  
 helpers = Betfair::Helpers.new
 
-markets = bf.get_all_markets(1, [1,3], nil, nil, nil, nil).split(':')
+markets = bf.get_all_markets(1, events, nil, nil, nil, nil).split(':')
 
 # Loop though the markets array
 markets.each do |market| 
